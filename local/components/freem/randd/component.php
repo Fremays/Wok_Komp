@@ -100,27 +100,82 @@ if ($arParams["SEF_MODE"] == "Y") {
         "VARIABLES" => $arVariables,
     );
 }
-// Получение имен в /*польз */св-вах инфоблока
+// Получение имен в св-вах инфоблока
 // TODO: fix this shit
-$prop = CIBlock::GetProperties($arParams['IBLOCK_ID'], array(), false); //Получение массива всех пользовательских свойств инфоблока
+//$prop = CIBlock::GetProperties($arParams['IBLOCK_ID'], array(), false); //Получение массива всех пользовательских свойств инфоблока
+//$arUserFields = array();
+//$arProductIDs = array();
+//while ($res_arr = $prop->Fetch()) {
+//    if (in_array($res_arr['CODE'], $arParams["PROPERTY_CODE"])) {
+//        $arUserFields[$res_arr['CODE']] = array(
+//            "NAME" => $res_arr["NAME"], // Записываем его название в отдельным массив с КОДОМ поля в виде ключа
+//        );
+//    }
+//}
+//
+//
+////  Проставляем префиксы для гетлиста
+//$arNewProps = array();
+//foreach ($arParams['PROPERTY_CODE'] as $prop) {
+//    if (!empty($prop))
+//        $arNewProps[] = "PROPERTY_" . $prop;
+//}
+//
+//$arSelect = array_merge($arParams['FIELD_CODE'], $arNewProps);
+//$arSelect[] = 'PROPERTY_' . $arParams['PROPERTY_CODE2'];
+////$arrSortAlown = array('catalog_PRICE_1'); //TODO: add price code into component props
+//$arSelect = array_merge($arSelect, array_values($arParams['PRICE_CODE']));
+//$arSelect = array_filter($arSelect);
+////  Возвращение списков элементов
+//$res = CIBlockElement::GetList(
+//    array(
+//        $arParams["SORT_BY"] => $arParams["SORT_ORDER"],
+//    ),
+//    array(
+//        "IBLOCK_TYPE" => $arParams['IBLOCK_TYPE'],
+//        "IBLOCK_ID" => $arParams['IBLOCK_ID'],
+//        "ACTIVE" => "Y",
+//    ),
+//    false,
+//    array("nTopCount" => $arParams['ELEMENTS_COUNT']),
+//    $arSelect
+//);
+//
+//while ($ar_fields = $res->GetNext()) {
+//    // Записываем в общий массив с группировкой по id элемента
+//    $arResult['ITEMS'][$ar_fields['ID']] = $ar_fields;
+//    // Запись названий и значений пользовательских полей(только тех, которые указаны в настройках компонента), сгруппированных по id элемента
+//    foreach ($arParams['PROPERTY_CODE'] as $key => $propCode) {
+//        $propVal = $ar_fields["PROPERTY_" . $propCode . "_VALUE"];
+//        $arResult['ITEMS'][$ar_fields['ID']]['PROPERTIES'][$key] = array(
+//            "NAME" => $arUserFields[$propCode]['NAME'],
+//            "VALUE" => $propVal,
+//        );
+//    }
+//    // Запись в отдельный подмассив только тех стандартных полей, которые указаны в настройках компонента
+//        foreach ($ar_fields as $key => $value) {
+//        if (in_array($key, $arParams['FIELD_CODE']) && $key != 'DETAIL_PAGE_URL')
+//            $arResult['ITEMS'][$ar_fields['ID']]['FIELDS'][$key] = $value;
+//    }
+//    //  Поправить
+//    $detailUrl = $arResult['URL_TEMPLATES']['detail'];
+//    $detailUrl = str_replace('#ELEMENT_ID#', $ar_fields['ID'], $detailUrl);
+//    $detailUrl = str_replace('#ID#', $ar_fields['ID'], $detailUrl);
+//    $arResult['ITEMS'][$ar_fields['ID']]['DETAIL_PAGE_URL'] = $arResult['FOLDER'] . $detailUrl;
+//    // Массив ID запесей 2 инфоблока
+//    $arProductIDs[$ar_fields['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE']] = $ar_fields['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE'];
+//}
+
 $arUserFields = array();
 $arProductIDs = array();
-while ($res_arr = $prop->Fetch()) {
-    if (in_array($res_arr['CODE'], $arParams["PROPERTY_CODE"])) {
-        $arUserFields[$res_arr['CODE']] = array(
-            "NAME" => $res_arr["NAME"], // Записываем его название в отдельным массив с КОДОМ поля в виде ключа
-        );
-    }
-}
-
-
+//$arSrav = array_merge($arParams["PROPERTY_CODE"]);
 //  Проставляем префиксы для гетлиста
 $arNewProps = array();
+$arProp = array();
 foreach ($arParams['PROPERTY_CODE'] as $prop) {
     if (!empty($prop))
         $arNewProps[] = "PROPERTY_" . $prop;
 }
-
 $arSelect = array_merge($arParams['FIELD_CODE'], $arNewProps);
 $arSelect[] = 'PROPERTY_' . $arParams['PROPERTY_CODE2'];
 //$arrSortAlown = array('catalog_PRICE_1'); //TODO: add price code into component props
@@ -140,35 +195,24 @@ $res = CIBlockElement::GetList(
     array("nTopCount" => $arParams['ELEMENTS_COUNT']),
     $arSelect
 );
-
-while ($ar_fields = $res->GetNext()) {
+while ($ar_fields = $res->GetNextElement()) {
     // Записываем в общий массив с группировкой по id элемента
-    $arResult['ITEMS'][$ar_fields['ID']] = $ar_fields;
-    // Запись названий и значений пользовательских полей(только тех, которые указаны в настройках компонента), сгруппированных по id элемента
-    foreach ($arParams['PROPERTY_CODE'] as $key => $propCode) {
-        $propVal = $ar_fields["PROPERTY_" . $propCode . "_VALUE"];
-        $arResult['ITEMS'][$ar_fields['ID']]['PROPERTIES'][$key] = array(
-            "NAME" => $arUserFields[$propCode]['NAME'],
-            "VALUE" => $propVal,
-        );
-    }
-    // Запись в отдельный подмассив только тех стандартных полей, которые указаны в настройках компонента
-//    foreach ($arParams{'FIELD_CODE'} as $key => $fieldCode){
-//        if ($ar_fields[$fieldCode])
-//            $arResult['ITEMS'][$ar_fields['ID']]['FIELDS'][$key] = $ar_fields[$fieldCode];
-//    }
-        foreach ($ar_fields as $key => $value) {
-        if (in_array($key, $arParams['FIELD_CODE']) && $key != 'DETAIL_PAGE_URL')
-            $arResult['ITEMS'][$ar_fields['ID']]['FIELDS'][$key] = $value;
-    }
-    //  Поправить
+    $ar_res = $ar_fields->GetFields();
+	$arResult['ITEMS'][$ar_res['ID']] = $ar_res;
+    $ar_res["PROPERTIES"] = $ar_fields->GetProperties();
+    foreach ($arParams["PROPERTY_CODE"] as $key => $pid) {
+		if(!empty($ar_res["PROPERTIES"][$pid]))
+			$arResult['ITEMS'][$ar_res['ID']]["DISPLAY_PROPERTIES"][$pid] = $ar_res["PROPERTIES"][$pid];
+	}
     $detailUrl = $arResult['URL_TEMPLATES']['detail'];
-    $detailUrl = str_replace('#ELEMENT_ID#', $ar_fields['ID'], $detailUrl);
-    $detailUrl = str_replace('#ID#', $ar_fields['ID'], $detailUrl);
-    $arResult['ITEMS'][$ar_fields['ID']]['DETAIL_PAGE_URL'] = $arResult['FOLDER'] . $detailUrl;
-    // Массив ID запесей 2 инфоблока
-    $arProductIDs[$ar_fields['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE']] = $ar_fields['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE'];
+    $detailUrl = str_replace('#ELEMENT_ID#', $ar_res['ID'], $detailUrl);
+    $detailUrl = str_replace('#ID#', $ar_res['ID'], $detailUrl);
+    //
+    $arResult['ITEMS'][$ar_res['ID']]['DETAIL_PAGE_URL'] = $arResult['FOLDER'] . $detailUrl;
+    //  Массив ID запесей 2 инфоблока
+    $arProductIDs[$ar_res['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE']] = $ar_res['PROPERTY_' . $arParams['PROPERTY_CODE2'] . '_VALUE'];
 }
+    //  Поправить
 
 if (count($arProductIDs) > 0) {
     //  Получение списка связанных элементов
@@ -213,6 +257,7 @@ if (!empty($arParams["PRICE_CODE"]))
             );
     }
 }
+dump($arResult);
 // Если найдены записи, то подключаем шаблон компонента. Иначе  - остановка кеширования
 if (count($arResult['ITEMS']) > 0) {
     $this->SetResultCacheKeys(array());

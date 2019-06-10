@@ -30,8 +30,6 @@ $rsIBlock2 = CIBlock::GetList(
 
 $arPrice = array();
 
-//if (!empty($arCurrentValues["PRICE_CODE"]))
-//{
 $rsPrice = CCatalogGroup::GetList(
     false,
     array(),
@@ -85,11 +83,6 @@ $arComponentParameters = Array(
             "ELEMENT_ID" => Array("NAME" => GetMessage("NEWS_ELEMENT_ID_DESC")),
         ),
             "SEF_MODE" => Array(
-//            "news" => array(
-//                "NAME" => GetMessage("T_IBLOCK_SEF_PAGE_NEWS"),
-//                "DEFAULT" => "",
-//                "VARIABLES" => array(),
-//            ),
             "section" => array(
                 "NAME" => GetMessage("T_IBLOCK_SEF_PAGE_NEWS_SECTION"),
                 "DEFAULT" => "",
@@ -100,21 +93,6 @@ $arComponentParameters = Array(
                 "DEFAULT" => "#ELEMENT_ID#/",
                 "VARIABLES" => array("ELEMENT_ID", "SECTION_ID"),
             ),
-//            "search" => array(
-//                "NAME" => GetMessage("T_IBLOCK_SEF_PAGE_SEARCH"),
-//                "DEFAULT" => "search/",
-//                "VARIABLES" => array(),
-//            ),
-//            "rss" => array(
-//                "NAME" => GetMessage("T_IBLOCK_SEF_PAGE_RSS"),
-//                "DEFAULT" => "rss/",
-//                "VARIABLES" => array(),
-//            ),
-//            "rss_section" => array(
-//                "NAME" => GetMessage("T_IBLOCK_SEF_PAGE_RSS_SECTION"),
-//                "DEFAULT" => "#SECTION_ID#/rss/",
-//                "VARIABLES" => array("SECTION_ID"),
-//            ),
         ),
         "IBLOCK_TYPE" => array(
             "PARENT" => "BASE",
@@ -189,14 +167,6 @@ $arComponentParameters = Array(
             "MULTIPLE" => "N",
             "VALUES" => $arProperty_LNS,
         ),
-//        "CATALOG" => array(
-//            "PARENT" => "DATA_SOURCE",
-//            "NAME" => GetMessage("T_IBLOCK_CATALOG"),
-//            "TYPE" => "LIST",
-//            "MULTIPLE" => "N",
-//            "VALUES" => $arProperty_LNS2,
-//        ),
-
         "CACHE_TIME" => array("DEFAULT" => "360000"),
         "AJAX_MODE" => array(),
         "PRICE_CODE" => array(

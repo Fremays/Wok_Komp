@@ -2,11 +2,9 @@
 $this->createFrame()->begin("Загрузка");
 foreach ($arResult['ITEMS'] as $key => $good){?>
 <p>
-    <?foreach ($good['FIELDS'] as $key2 => $value) {
-	        echo GetMessage("IBLOCK_FIELD_".$key2)?>:&nbsp;<?=$value;?>
+	        Название :&nbsp;<?=$good['NAME'];?>
         <br />
-        <?}?>
-    <?foreach ($good['PROPERTIES']  as $key2 => $wut) {
+    <?foreach ($good['DISPLAY_PROPERTIES']  as $key2 => $wut) {
         if (!empty($wut['VALUE'])){
         	echo $wut["NAME"] . ' - ' . $wut['VALUE']?><br /><?;
         }
@@ -20,7 +18,7 @@ foreach ($arResult['ITEMS'] as $key => $good){?>
     <?echo $good['LINK_DELIVERY']['NAME']?><br />
 
 </p>
-    <a href="<?=$good['DETAIL_PAGE_URL']?>">Детальная страница</a>
+        <a href="<?=$good['DETAIL_PAGE_URL']?>">Детальная страница</a>
 <?}?>
 
 
